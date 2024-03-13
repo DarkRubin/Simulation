@@ -1,4 +1,4 @@
-package src;
+package src.Creature;
 
 public class Predator extends Creature {
     @Override

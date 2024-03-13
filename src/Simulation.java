@@ -10,4 +10,7 @@ public class Simulation {
     public void pauseSimulation() {
 
     }
+    public static void main(String[] args) {
+
+    }
 }
