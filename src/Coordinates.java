@@ -3,8 +3,8 @@ package src;
 import java.util.Objects;
 
 public class Coordinates {
-    public final Integer length;
-    public final Integer width;
+    public Integer length;
+    public Integer width;
 
     public Coordinates(Integer length, Integer width) {
         this.length = length;
