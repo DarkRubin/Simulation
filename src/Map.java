@@ -9,7 +9,9 @@ public class Map {
     public HashMap<Coordinates, Entity> map = new HashMap<>();
 
 
-
+    public void removeEntity(Coordinates coordinates) {
+        map.remove(coordinates);
+    }
 
 
     public void setEntity(Entity entity, Coordinates coordinates) {

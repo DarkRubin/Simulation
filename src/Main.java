@@ -1,8 +1,10 @@
 package src;
 
+import java.util.Scanner;
+
 public class Main {
     public static void main(String[] args) {
-//        Scanner scanner = new Scanner(System.in);
+        Scanner scanner = new Scanner(System.in);
 //
 //        System.out.println("Введите длину поля:");
 //        length = scanner.nextInt();
@@ -26,8 +28,9 @@ public class Main {
 //        }
 //        System.out.println("dddd");
         Simulation simulation = new Simulation();
-        simulation.createSimulation();
-
+        while (scanner.hasNextLine()) {
+            simulation.startSimulation();
+        }
 
     }
 }
