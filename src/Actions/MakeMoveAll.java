@@ -5,7 +5,6 @@ import src.Creature.Herbivore;
 import src.Creature.Predator;
 import src.Entity.Entity;
 
-import static src.Entity.Grass.countGrass;
 import static src.Simulation.*;
 
 public class MakeMoveAll extends Actions {

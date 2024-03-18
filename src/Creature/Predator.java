@@ -1,8 +1,6 @@
 package src.Creature;
 
 import src.Coordinates;
-import src.Entity.Entity;
-import src.Map;
 
 import static src.Simulation.map;
 
@@ -12,7 +10,6 @@ public class Predator extends Creature {
     public Predator(Coordinates coordinates) {
         super(coordinates);
     }
-//    private static final Entity FOOD = new Herbivore(null);
 
     @Override
     public void makeMove(Coordinates coordinates) {
