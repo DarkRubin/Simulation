@@ -4,6 +4,8 @@ import src.Coordinates;
 import src.Entity.Entity;
 import src.Map;
 
+import static src.Simulation.map;
+
 public class Predator extends Creature {
 
     private static final int POWER = 5;
@@ -13,11 +15,11 @@ public class Predator extends Creature {
 //    private static final Entity FOOD = new Herbivore(null);
 
     @Override
-    public void makeMove(Map map, Coordinates coordinates) {
-        Coordinates belowCells = checkBelowCells(coordinates, false, map);
+    public void makeMove(Coordinates coordinates) {
+        Coordinates belowCells = checkBelowCells(coordinates, false);
         if (belowCells != null) {
             Herbivore herbivore = (Herbivore) map.getEntity(belowCells);
-            herbivore.takeHurt(map, POWER);
+            herbivore.takeHurt(POWER);
         }
     }
 }

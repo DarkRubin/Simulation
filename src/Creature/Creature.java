@@ -3,7 +3,8 @@ package src.Creature;
 import src.Coordinates;
 import src.Entity.Entity;
 import src.Entity.Grass;
-import src.Map;
+
+import static src.Simulation.map;
 
 public abstract class Creature extends Entity {
 
@@ -11,12 +12,14 @@ public abstract class Creature extends Entity {
         super(coordinates);
     }
 
-    protected abstract void makeMove(Map map, Coordinates coordinates);
+    protected abstract void makeMove(Coordinates coordinates);
 
 
+    protected Coordinates foundWay(Coordinates coordinates) {
+        return null;
+    }
 
-
-    protected Coordinates checkBelowCells(Coordinates coordinates, boolean isHerbivore, Map map) {
+    protected Coordinates checkBelowCells(Coordinates coordinates, boolean isHerbivore) {
         int length = coordinates.length;
         int width = coordinates.width;
         Coordinates[] search = new Coordinates[8];
@@ -29,29 +32,46 @@ public abstract class Creature extends Entity {
             }
         }
         if (isHerbivore) {
-            return searchGrassBelow(search, map);
+            return searchGrassBelow(search);
         }else {
-            return searchHerbivoreBelow(search, map);
+            return searchHerbivoreBelow(search);
         }
     }
-    private Coordinates searchGrassBelow(Coordinates[] search, Map map) {
+    private Coordinates searchGrassBelow(Coordinates[] search) {
         for (Coordinates value : search) {
-            if (map.getEntity(value) != null && map.getEntity(value) instanceof Grass) {
+            if (map.getEntity(value) instanceof Grass) {
                 return value;
             }
         }
         return null;
     }
 
-    private Coordinates searchHerbivoreBelow(Coordinates[] search, Map map) {
+    private Coordinates searchHerbivoreBelow(Coordinates[] search) {
         for (Coordinates value : search) {
-            if (map.getEntity(value) != null && map.getEntity(value) instanceof Herbivore) {
+            if (map.getEntity(value) != null &&
+                    map.getEntity(value) instanceof Herbivore) {
                 return value;
             }
         }
         return null;
     }
 
+    private void searchGrassOnMap(Coordinates coordinates) {
+        int length = coordinates.length;
+        int width = coordinates.width;
+        Coordinates[] search = new Coordinates[8];
+        for (int k = 1; k < 50; k++) {
+            for (int i = -k; i < k; i++) {
+                for (int j = -k; j < k; j++) {
+                    if (i != 0 || j != 0) {
+                        Coordinates result =
+                                new Coordinates(length + i, width + j);
+                    }
+                }
+                k++;
+            }
+        }
 
-
+        System.out.println();
+    }
 }

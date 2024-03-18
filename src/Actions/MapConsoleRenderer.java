@@ -1,23 +1,17 @@
-package src;
+package src.Actions;
 
+import src.Coordinates;
 import src.Entity.Entity;
-import src.Simulation;
 
-import static src.Simulation.MAX_LENGTH;
-import static src.Simulation.MAX_WIDTH;
+import static src.Simulation.*;
 
-public class MapConsoleRenderer {
-
-
-
-
-    public static final String ANSI_WHITE_SQUARE_BACKGROUND = "\u001B[47m";
-    public static final String ANSI_RESET = "\u001B[0m";
-    public void render(Map map) {
-
-        for (int width = 1; width <= MAX_WIDTH; width++) {
+public class MapConsoleRenderer extends Actions{
+    private static final String ANSI_WHITE_SQUARE_BACKGROUND = "\u001B[47m";
+    private static final String ANSI_RESET = "\u001B[0m";
+    public void render() {
+        for (int width = 1; width <= maxWidth; width++) {
             String line = ANSI_WHITE_SQUARE_BACKGROUND;
-            for (int length = 1; length <= MAX_LENGTH; length++) {
+            for (int length = 1; length <= maxLength; length++) {
                 Coordinates coordinates = new Coordinates(length,width);
                 String cell = selectSpriteForCell(map.getEntity(coordinates));
                 line += cell;
@@ -25,11 +19,10 @@ public class MapConsoleRenderer {
             line += ANSI_RESET;
             System.out.println(line);
         }
-
     }
     private String selectSpriteForCell(Entity entity) {
         if (entity == null) {
-            return "   ";
+            return " ⬜";
         }
         return switch (entity.getClass().getSimpleName()) {
             case "Grass" -> " 🌿";

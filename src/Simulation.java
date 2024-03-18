@@ -1,90 +1,60 @@
 package src;
 
-import src.Creature.Herbivore;
-import src.Creature.Predator;
-import src.Entity.Entity;
-import src.Entity.Grass;
-import src.Entity.Rock;
-import src.Entity.Tree;
+import src.Actions.*;
 
-import java.util.Random;
+import java.util.Scanner;
+
+import static java.lang.Thread.sleep;
+import static src.Creature.Herbivore.countHerbivore;
+import static src.Entity.Grass.countGrass;
+
 
 public class Simulation {
-    public static final int MAX_LENGTH = 8;
-    public static final int MAX_WIDTH = 8;
-
-    private Map map = new Map();
-    private MapConsoleRenderer renderer = new MapConsoleRenderer();
-    private static boolean isPause = false;
-    private int move;
-    private boolean isCreated = false;
-
-
-    private void nextTurn() {
-        for (int width = 1; width <= MAX_WIDTH; width++) {
-            for (int length = 1; length <= MAX_LENGTH; length++) {
-                Coordinates coordinates = new Coordinates(length, width);
-                Entity entity = map.getEntity(coordinates);
-                if (entity instanceof Herbivore) {
-                    ((Herbivore) entity).makeMove(map, coordinates);
-                }
-                if (entity instanceof Predator) {
-                    ((Predator) entity).makeMove(map, coordinates);
-                }
-             }
-        }
-        move++;
-    }
-
-    private int randomInt() {
-        Random random = new Random();
-        return random.nextInt(1,20);
-    }
-
-    private Entity summonEntity(Coordinates coordinates, int random) {
-        return switch (random) {
-            case 1 -> new Tree(coordinates);
-            case 2,3 -> new Grass(coordinates);
-            case 4 -> new Rock(coordinates);
-            case 5 -> new Predator(coordinates);
-            case 6,7 -> new Herbivore(coordinates);
-            default -> throw new IllegalArgumentException() ;
-        };
-    }
-
-    private void createSimulation() {
-        for (int width = 1; width <= MAX_WIDTH; width++) {
-            for (int length = 1; length <= MAX_LENGTH; length++) {
-                Coordinates coordinates = new Coordinates(length,width);
-                int random = randomInt();
-                if (random > 7) continue;
-                Entity entity = summonEntity(coordinates, random);
-                map.setEntity(entity, coordinates);
-            }
-        }
-        renderer.render(map);
-        isCreated = true;
+    public static int maxLength;
+    public static int maxWidth;
+    public static Map map = new Map();
+    public static boolean isPause = false;
+    private final MapConsoleRenderer mapConsoleRenderer = new MapConsoleRenderer();
+    private final MakeMoveAll makeMoveAll = new MakeMoveAll();
+    private final SpawnMoreObjects spawnMoreObjects = new SpawnMoreObjects();
+    public Simulation() {
+        new CreateSimulation();
+        startSimulation();
     }
 
     public void startSimulation() {
-
-        if (!isCreated) {
-            createSimulation();
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Введите количество ходов для симуляции, \"Q\" - выйти");
+        String line = scanner.nextLine();
+        while (!line.equalsIgnoreCase("q")) {
+            int count = Integer.parseInt(line);
+            for (int i = 0; i < count; i++) {
+                nextTurn();
+                try {
+                    sleep(700);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+            System.out.println("Введите количество ходов для симуляции, \"Q\" - выйти");
+            line = scanner.nextLine();
         }
-        nextTurn();
-        System.out.println(move);
-        renderer.render(map);
 
     }
 
-    private void spawnNewGrass() {
 
+    public void pauseOrResumeSimulation() {
+        isPause = !isPause;
     }
+    public void nextTurn() {
+        if (countGrass < 2) {
+            spawnMoreObjects.spawnGrass();
+        }
+        if (countHerbivore < 2) {
+            spawnMoreObjects.spawnHerbivore();
+        }
 
-    public void pauseSimulation() {
-        isPause = true;
-    }
-    public void resumeSimulation() {
-        isPause = false;
+        makeMoveAll.nextTurn();
+        mapConsoleRenderer.render();
     }
 }
