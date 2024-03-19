@@ -3,8 +3,12 @@ package src.Creature;
 import src.Coordinates;
 import src.Entity.Entity;
 import src.Entity.Grass;
+import src.Graph;
+import src.GraphNode;
 
-import static src.Simulation.map;
+import java.util.ArrayList;
+
+import static src.Simulation.*;
 
 public abstract class Creature extends Entity {
 
@@ -14,64 +18,72 @@ public abstract class Creature extends Entity {
 
     protected abstract void makeMove(Coordinates coordinates);
 
-
     protected Coordinates foundWay(Coordinates coordinates) {
+
         return null;
     }
 
     protected Coordinates checkBelowCells(Coordinates coordinates, boolean isHerbivore) {
-        int length = coordinates.length;
-        int width = coordinates.width;
-        Coordinates[] search = new Coordinates[8];
-        int index = 0;
-        for (int i = -1; i <= 1; i++) {
-            for (int j = -1; j <= 1; j++) {
-                if (i != 0 || j != 0) {
-                    search[index++] = new Coordinates(length + i, width + j);
-                }
-            }
-        }
+        Coordinates[] search = coordinates.getBelowCoordinates(coordinates);
         if (isHerbivore) {
-            return searchGrassBelow(search);
-        }else {
-            return searchHerbivoreBelow(search);
-        }
-    }
-    private Coordinates searchGrassBelow(Coordinates[] search) {
-        for (Coordinates value : search) {
-            if (map.getEntity(value) instanceof Grass) {
-                return value;
-            }
-        }
-        return null;
-    }
-
-    private Coordinates searchHerbivoreBelow(Coordinates[] search) {
-        for (Coordinates value : search) {
-            if (map.getEntity(value) != null &&
-                    map.getEntity(value) instanceof Herbivore) {
-                return value;
-            }
-        }
-        return null;
-    }
-
-    private void searchGrassOnMap(Coordinates coordinates) {
-        int length = coordinates.length;
-        int width = coordinates.width;
-        Coordinates[] search = new Coordinates[8];
-        for (int k = 1; k < 50; k++) {
-            for (int i = -k; i < k; i++) {
-                for (int j = -k; j < k; j++) {
-                    if (i != 0 || j != 0) {
-                        Coordinates result =
-                                new Coordinates(length + i, width + j);
-                    }
+            for (Coordinates value : search) {
+                if (map.getEntity(value) instanceof Grass) {
+                    return value;
                 }
-                k++;
+            }
+        }else {
+            for (Coordinates value : search) {
+                if (map.getEntity(value) instanceof Herbivore) {
+                    return value;
+                }
             }
         }
+        return null;
+    }
 
-        System.out.println();
+
+    protected ArrayList<Coordinates> searchGrassOnMap() {
+        ArrayList<Coordinates> grassOnMap = new ArrayList<>();
+        for (int width = 1; width <= maxWidth; width++) {
+            for (int length = 1; length <= maxLength; length++) {
+                Coordinates newCoordinates = new Coordinates(length, width);
+                Entity entity = map.getEntity(newCoordinates);
+                if (entity instanceof Grass) {
+                    grassOnMap.add(newCoordinates);
+                }
+            }
+        }
+        return grassOnMap;
+    }
+    private Coordinates[] foundEmptyCell(Coordinates coordinates) {
+        Coordinates[] emptyCells = new Coordinates[8];
+        int index = 0;
+        Coordinates[] belowCoordinates = coordinates.getBelowCoordinates(coordinates);
+        for (Coordinates coordinatesIterate : belowCoordinates) {
+            if (map.getEntity(coordinatesIterate) == null) {
+                emptyCells[index++] = coordinatesIterate;
+            }
+        }
+        return emptyCells;
+    }
+
+    private Graph buildGraph(Coordinates coordinates, boolean isHerbivore) {
+        Graph graph = new Graph();
+        GraphNode startNode = new GraphNode(coordinates);
+        graph.addNode(startNode);
+        while (checkBelowCells(coordinates, isHerbivore) != null) {
+            for (Coordinates thisCell : foundEmptyCell(coordinates)) {
+                GraphNode graphNode = new GraphNode(thisCell);
+                graph.addNode(graphNode);
+                graph.addEdge(startNode, graphNode);
+            }
+            for (int i = 0; i < foundEmptyCell(coordinates).length; i++) {
+                coordinates = foundEmptyCell(coordinates)[i];
+            }
+
+        }
+
+
+        return graph;
     }
 }

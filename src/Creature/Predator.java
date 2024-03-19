@@ -9,6 +9,7 @@ public class Predator extends Creature {
     private static final int POWER = 5;
     public Predator(Coordinates coordinates) {
         super(coordinates);
+
     }
 
     @Override

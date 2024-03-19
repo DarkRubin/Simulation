@@ -7,7 +7,7 @@ import static src.Simulation.map;
 
 public class Herbivore extends Creature {
 
-    public static int countHerbivore;
+    public static int countHerbivore = 0;
     private int healthPoint = 10;
     public Herbivore(Coordinates coordinates) {
         super(coordinates);
