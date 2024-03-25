@@ -5,7 +5,7 @@ import src.Entity.Entity;
 
 import static src.Simulation.*;
 
-public class MapConsoleRenderer extends Actions{
+public class MapConsoleRenderer extends Action {
     private static final String ANSI_WHITE_SQUARE_BACKGROUND = "\u001B[47m";
     private static final String ANSI_RESET = "\u001B[0m";
     public void render() {
@@ -35,7 +35,8 @@ public class MapConsoleRenderer extends Actions{
     }
 
 
-
-
-
+    @Override
+    public void doInThisMove() {
+        render();
+    }
 }

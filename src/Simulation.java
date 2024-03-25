@@ -5,18 +5,17 @@ import src.Actions.*;
 import java.util.Scanner;
 
 import static java.lang.Thread.sleep;
-import static src.Creature.Herbivore.countHerbivore;
-import static src.Entity.Grass.countGrass;
 
 
 public class Simulation {
+    private static final String START_TEXT = "Введите количество ходов для симуляции, \"Q\" - выйти";
     public static int maxLength;
     public static int maxWidth;
     public static Map map = new Map();
-    public static boolean isPause = false;
-    private final MapConsoleRenderer mapConsoleRenderer = new MapConsoleRenderer();
-    private final MakeMoveAll makeMoveAll = new MakeMoveAll();
-    private final SpawnMoreObjects spawnMoreObjects = new SpawnMoreObjects();
+    public boolean isPause = false;
+    private final TurnActions turnActions = new TurnActions();
+
+
     public Simulation() {
         new CreateSimulation();
         startSimulation();
@@ -24,19 +23,19 @@ public class Simulation {
 
     public void startSimulation() {
         Scanner scanner = new Scanner(System.in);
-        System.out.println("Введите количество ходов для симуляции, \"Q\" - выйти");
+        System.out.println(START_TEXT);
         String line = scanner.nextLine();
         while (!line.equalsIgnoreCase("q")) {
             int count = Integer.parseInt(line);
             for (int i = 0; i < count; i++) {
-                nextTurn();
+                turnActions.nextTurn();
                 try {
                     sleep(700);
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }
             }
-            System.out.println("Введите количество ходов для симуляции, \"Q\" - выйти");
+            System.out.println(START_TEXT);
             line = scanner.nextLine();
         }
 
@@ -45,16 +44,5 @@ public class Simulation {
 
     public void pauseOrResumeSimulation() {
         isPause = !isPause;
-    }
-    public void nextTurn() {
-        if (countGrass < 2) {
-            spawnMoreObjects.spawnGrass();
-        }
-        if (countHerbivore < 2) {
-            spawnMoreObjects.spawnHerbivore();
-        }
-
-        makeMoveAll.nextTurn();
-        mapConsoleRenderer.render();
     }
 }

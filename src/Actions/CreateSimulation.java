@@ -14,7 +14,7 @@ import java.util.Scanner;
 
 import static src.Simulation.*;
 
-public class CreateSimulation extends Actions {
+public class CreateSimulation {
 
     private void chooseMapSize() {
         Scanner scanner = new Scanner(System.in);
@@ -63,6 +63,8 @@ public class CreateSimulation extends Actions {
                 map.setEntity(entity, coordinates);
             }
         }
+        MapConsoleRenderer mapConsoleRenderer = new MapConsoleRenderer();
+        mapConsoleRenderer.render();
     }
 
 

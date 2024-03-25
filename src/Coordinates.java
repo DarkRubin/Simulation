@@ -11,26 +11,31 @@ public class Coordinates {
         this.width = width;
     }
 
-    public Coordinates changeCoordinates(int addLength, int addWidth) {
-        if (length + addLength > -1 || width + addWidth > -1) {
-            return new Coordinates(length + addLength, width + addWidth);
-        }
-        return null;
-    }
-
-    public Coordinates[] getBelowCoordinates(Coordinates coordinates) {
+    public Coordinates[] getBelowCoordinates(boolean onlyEmpty) {
         Coordinates[] belowCells = new Coordinates[8];
         int index = -1;
         for (int i = -1; i <= 1; i++) {
             for (int j = -1; j <= 1; j++) {
                 if (i != 0 || j != 0) {
-                    if (coordinates.changeCoordinates(i, j) != null)
-                        belowCells[++index] = coordinates.changeCoordinates(i, j);
+                    int newLength = length + j;
+                    int newWidth = width + i;
+                    belowCells[++index] = new Coordinates(newLength, newWidth);
                 }
             }
         }
         return belowCells;
     }
+
+    public int moduleCoordinate() {
+        return length + width;
+    }
+
+    public Coordinates getDistance(Coordinates endCoordinates) {
+        int distanceLength = Math.abs(length - endCoordinates.length);
+        int distanceWidth = Math.abs(width - endCoordinates.width);
+        return new Coordinates(distanceLength, distanceWidth);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

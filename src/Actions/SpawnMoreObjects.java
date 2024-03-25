@@ -1,19 +1,28 @@
 package src.Actions;
 
 import src.Coordinates;
-
 import src.Creature.Herbivore;
 import src.Entity.Grass;
 
 import java.util.Random;
 
+import static src.Creature.Herbivore.herbivoreOnMap;
+import static src.Entity.Grass.grassOnMap;
 import static src.Simulation.*;
-import static src.Simulation.map;
 
-public class SpawnMoreObjects extends Actions {
+public class SpawnMoreObjects extends Action {
 
+    @Override
+    public void doInThisMove() {
+        if (grassOnMap.size() < 2) {
+            spawnGrass();
+        }
+        if (herbivoreOnMap.size() < 2) {
+            spawnHerbivore();
+        }
+    }
 
-    public void spawnGrass() {
+    public static void spawnGrass() {
         int countGrassToSpawn = maxLength * maxWidth / 8;
         boolean val;
         while (0 < countGrassToSpawn) {
@@ -34,7 +43,7 @@ public class SpawnMoreObjects extends Actions {
 
     }
 
-    public void spawnHerbivore() {
+    public static void spawnHerbivore() {
         int countHerbivoreToSpawn = maxLength * maxWidth / 10;
         boolean val = new Random().nextInt(10) == 0;
         while (0 < countHerbivoreToSpawn) {
