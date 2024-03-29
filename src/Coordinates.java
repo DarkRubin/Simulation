@@ -1,6 +1,9 @@
 package src;
 
+import java.util.ArrayList;
 import java.util.Objects;
+
+import static src.Simulation.*;
 
 public class Coordinates {
     public Integer length;
@@ -12,22 +15,30 @@ public class Coordinates {
     }
 
     public Coordinates[] getBelowCoordinates(boolean onlyEmpty) {
-        Coordinates[] belowCells = new Coordinates[8];
-        int index = -1;
+        ArrayList<Coordinates> belowCells = new ArrayList<>();
+        int newLength = 0;
+        int newWidth = 0;
         for (int i = -1; i <= 1; i++) {
             for (int j = -1; j <= 1; j++) {
                 if (i != 0 || j != 0) {
-                    int newLength = length + j;
-                    int newWidth = width + i;
-                    belowCells[++index] = new Coordinates(newLength, newWidth);
+                    if (length + j >= 0 && length + j <= maxLength) {
+                        newLength = length + j;
+                    } else continue;
+                    if (width + i >= 0 && width + i <= maxWidth) {
+                        newWidth = width + i;
+                    } else continue;
+                    if (!onlyEmpty) {
+                        belowCells.add(new Coordinates(newLength, newWidth));
+                    }else if (map.getEntity(new Coordinates(newLength, newWidth)) == null) {
+                        belowCells.add(new Coordinates(newLength, newWidth));
+                    }
                 }
             }
         }
-        return belowCells;
-    }
-
-    public int moduleCoordinate() {
-        return length + width;
+        if (belowCells.isEmpty()) {
+            return null;
+        }
+        return belowCells.toArray(new Coordinates[0]);
     }
 
     public Coordinates getDistance(Coordinates endCoordinates) {

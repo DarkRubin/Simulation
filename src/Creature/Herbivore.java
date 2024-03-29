@@ -1,6 +1,5 @@
 package src.Creature;
 
-import src.Actions.MapConsoleRenderer;
 import src.Coordinates;
 
 
@@ -10,18 +9,17 @@ import static src.Entity.Grass.countGrass;
 import static src.Simulation.map;
 
 public class Herbivore extends Creature {
-    private final MapConsoleRenderer renderer = new MapConsoleRenderer();
 
     public Coordinates coordinates;
     private static final int MOVE_RANGE = 4;
-    private static int healthPoint = 10;
+    private int healthPoint = 10;
     public static ArrayList<Coordinates> herbivoreOnMap = new ArrayList<>();
 
 
     public Herbivore(Coordinates coordinates) {
-        super(coordinates);
+        super(coordinates, true);
+        this.coordinates = coordinates;
         herbivoreOnMap.add(coordinates);
-        IS_HERBIVORE = true;
     }
 
     public void takeHurt(int power) {
@@ -31,23 +29,19 @@ public class Herbivore extends Creature {
             herbivoreOnMap.remove(coordinates);
         }
     }
-    @Override
+
     public void makeMove(Coordinates coordinates) {
-        ArrayList<Coordinates> visited = new ArrayList<>();
-        Coordinates belowCells = checkBelowCells(coordinates);
-        if (belowCells != null) {
-            map.removeEntity(belowCells);
-            countGrass--;
-            healthPoint += 5;
-        } else {
-            ArrayList<Coordinates> way = foundWay(visited, coordinates);
-            if (way != null) {
-                for (int i = 0; i < MOVE_RANGE; i++) {
-                    this.coordinates = way.get(i);
-                    renderer.render();
-                }
-            }
-        }
+        if (!HerbivoreEat(coordinates))
+            goForFood(coordinates, MOVE_RANGE);
     }
 
+    public boolean HerbivoreEat(Coordinates coordinates) {
+        Coordinates belowCell = checkCellsForFood(coordinates);
+        if (belowCell != null) {
+            map.removeEntity(belowCell);
+            countGrass--;
+            healthPoint += 5;
+            return true;
+        } else return false;
+    }
 }

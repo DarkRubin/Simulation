@@ -12,8 +12,8 @@ public class MakeMoveAll extends Action {
     public void nextTurn() {
 
         for (Coordinates coordinates : Predator.predatorsOnMap) {
-            Predator entity = (Predator) map.getEntity(coordinates);
-            entity.makeMove(coordinates);
+            Predator predator = (Predator) map.getEntity(coordinates);
+            predator.makeMove(coordinates);
         }
         for (Coordinates coordinates : Herbivore.herbivoreOnMap) {
             Herbivore herbivore = (Herbivore) map.getEntity(coordinates);

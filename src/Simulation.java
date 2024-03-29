@@ -8,12 +8,13 @@ import static java.lang.Thread.sleep;
 
 
 public class Simulation {
-    private static final String START_TEXT = "Введите количество ходов для симуляции, \"Q\" - выйти";
+    private static final String START_TEXT = "Введите количество ходов для симуляции,\"SPACE\" чтобы остановить, \"0\" - выйти";
     public static int maxLength;
     public static int maxWidth;
+
     public static Map map = new Map();
-    public boolean isPause = false;
     private final TurnActions turnActions = new TurnActions();
+    private final Scanner scanner = new Scanner(System.in);
 
 
     public Simulation() {
@@ -22,11 +23,10 @@ public class Simulation {
     }
 
     public void startSimulation() {
-        Scanner scanner = new Scanner(System.in);
+
         System.out.println(START_TEXT);
-        String line = scanner.nextLine();
-        while (!line.equalsIgnoreCase("q")) {
-            int count = Integer.parseInt(line);
+        int count = scanner.nextInt();
+        while (count != 0) {
             for (int i = 0; i < count; i++) {
                 turnActions.nextTurn();
                 try {
@@ -36,13 +36,17 @@ public class Simulation {
                 }
             }
             System.out.println(START_TEXT);
-            line = scanner.nextLine();
+            count = scanner.nextInt();
         }
-
     }
 
 
-    public void pauseOrResumeSimulation() {
-        isPause = !isPause;
-    }
+
+//    public void pauseSimulation() {
+//        System.out.println("Симуляция остановлена нажмите \"SPACE\" чтобы возобновить");
+//        while (true) {
+//            if (scanner.nextLine().equals(" "))
+//                return;
+//        }
+//    }
 }

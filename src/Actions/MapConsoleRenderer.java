@@ -10,15 +10,16 @@ public class MapConsoleRenderer extends Action {
     private static final String ANSI_RESET = "\u001B[0m";
     public void render() {
         for (int width = 1; width <= maxWidth; width++) {
-            String line = ANSI_WHITE_SQUARE_BACKGROUND;
+            StringBuilder line = new StringBuilder(ANSI_WHITE_SQUARE_BACKGROUND);
             for (int length = 1; length <= maxLength; length++) {
                 Coordinates coordinates = new Coordinates(length,width);
                 String cell = selectSpriteForCell(map.getEntity(coordinates));
-                line += cell;
+                line.append(cell);
             }
-            line += ANSI_RESET;
+            line.append(ANSI_RESET);
             System.out.println(line);
         }
+        System.out.println();
     }
     private String selectSpriteForCell(Entity entity) {
         if (entity == null) {
