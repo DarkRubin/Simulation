@@ -1,16 +1,14 @@
 package src.Creature;
 
 import src.Actions.MapConsoleRenderer;
-import src.Actions.WaySearch;
+import src.Actions.SearchWay;
 import src.Coordinates;
 import src.Entity.Entity;
 import src.Entity.Grass;
 
 
-import java.util.ArrayList;
+import java.util.List;
 
-import static src.Creature.Herbivore.herbivoreOnMap;
-import static src.Entity.Grass.grassOnMap;
 import static src.Simulation.*;
 
 public abstract class Creature extends Entity {
@@ -21,22 +19,26 @@ public abstract class Creature extends Entity {
         this.IS_HERBIVORE = IS_HERBIVORE;
     }
 
-    protected void goForFood(Coordinates coordinates, int MOVE_RANGE) {
-        ArrayList<Coordinates> foodOnMap = IS_HERBIVORE ? grassOnMap : herbivoreOnMap;
-        int index = 0;
-        MapConsoleRenderer renderer = new MapConsoleRenderer();
-        WaySearch waySearch = new WaySearch(foodOnMap);
-        ArrayList<Coordinates> way = waySearch.foundWay(coordinates);
+    protected void foundAndGo(Coordinates coordinates, int MOVE_RANGE) {
+        SearchWay searchWay = new SearchWay(IS_HERBIVORE, coordinates);
+        List<Coordinates> way = searchWay.foundWay();
         if (way != null && way.size() > 1) {
-            way.removeFirst();
-            for (Coordinates cell : way.reversed()) {
-                if (index <= MOVE_RANGE) {
-                    map.moveEntity(coordinates, cell, map);
-                    renderer.render();
-                    index++;
-                }
+            way.removeLast();
+            goForFood(MOVE_RANGE, way);
+        }
+    }
+
+    private void goForFood(int MOVE_RANGE, List<Coordinates> way) {
+        MapConsoleRenderer renderer = new MapConsoleRenderer();
+        int index = 0;
+        for (Coordinates cell : way.reversed()) {
+            if (index <= MOVE_RANGE) {
+                map.moveEntity(coordinates, cell);
+                coordinates = cell;
+                index++;
             }
         }
+        renderer.render();
     }
 
     protected Coordinates checkCellsForFood(Coordinates coordinates) {

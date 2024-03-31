@@ -6,17 +6,18 @@ import src.Entity.Entity;
 import static src.Simulation.*;
 
 public class MapConsoleRenderer extends Action {
-    private static final String ANSI_WHITE_SQUARE_BACKGROUND = "\u001B[47m";
-    private static final String ANSI_RESET = "\u001B[0m";
+//    private static final String ANSI_WHITE_SQUARE_BACKGROUND = "\u001B[47m";
+//    private static final String ANSI_RESET = "\u001B[0m";
     public void render() {
         for (int width = 1; width <= maxWidth; width++) {
-            StringBuilder line = new StringBuilder(ANSI_WHITE_SQUARE_BACKGROUND);
+//            StringBuilder line = new StringBuilder(ANSI_WHITE_SQUARE_BACKGROUND);
+            StringBuilder line = new StringBuilder();
             for (int length = 1; length <= maxLength; length++) {
                 Coordinates coordinates = new Coordinates(length,width);
                 String cell = selectSpriteForCell(map.getEntity(coordinates));
                 line.append(cell);
             }
-            line.append(ANSI_RESET);
+//            line.append(ANSI_RESET);
             System.out.println(line);
         }
         System.out.println();

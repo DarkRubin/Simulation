@@ -4,6 +4,7 @@ import src.Coordinates;
 
 import java.util.ArrayList;
 
+import static src.Creature.Herbivore.herbivoresOnMap;
 import static src.Simulation.map;
 
 public class Predator extends Creature {
@@ -21,9 +22,8 @@ public class Predator extends Creature {
     }
 
     public void makeMove(Coordinates coordinates) {
-        if (!PredatorEat(coordinates)) {
-            goForFood(coordinates, MOVE_RANGE);
-        }
+        if (PredatorEat(coordinates) || herbivoresOnMap.isEmpty()) return;
+        foundAndGo(coordinates, MOVE_RANGE);
     }
 
     public boolean PredatorEat(Coordinates coordinates) {

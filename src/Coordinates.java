@@ -16,15 +16,15 @@ public class Coordinates {
 
     public Coordinates[] getBelowCoordinates(boolean onlyEmpty) {
         ArrayList<Coordinates> belowCells = new ArrayList<>();
-        int newLength = 0;
-        int newWidth = 0;
+        int newLength;
+        int newWidth;
         for (int i = -1; i <= 1; i++) {
             for (int j = -1; j <= 1; j++) {
                 if (i != 0 || j != 0) {
-                    if (length + j >= 0 && length + j <= maxLength) {
+                    if (length + j > 0 && length + j <= maxLength) {
                         newLength = length + j;
                     } else continue;
-                    if (width + i >= 0 && width + i <= maxWidth) {
+                    if (width + i > 0 && width + i <= maxWidth) {
                         newWidth = width + i;
                     } else continue;
                     if (!onlyEmpty) {
@@ -41,11 +41,6 @@ public class Coordinates {
         return belowCells.toArray(new Coordinates[0]);
     }
 
-    public Coordinates getDistance(Coordinates endCoordinates) {
-        int distanceLength = Math.abs(length - endCoordinates.length);
-        int distanceWidth = Math.abs(width - endCoordinates.width);
-        return new Coordinates(distanceLength, distanceWidth);
-    }
 
     @Override
     public boolean equals(Object o) {

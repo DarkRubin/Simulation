@@ -4,7 +4,7 @@ import src.Creature.Herbivore;
 import src.Entity.Entity;
 
 import java.util.HashMap;
-import static src.Creature.Herbivore.herbivoreOnMap;
+import static src.Creature.Herbivore.herbivoresOnMap;
 import static src.Creature.Predator.predatorsOnMap;
 
 public class Map {
@@ -22,17 +22,18 @@ public class Map {
         map.put(coordinates, entity);
     }
 
-    public void moveEntity(Coordinates coordinates, Coordinates newCoordinates, Map map) {
-        Entity entity = map.getEntity(coordinates);
+    public void moveEntity(Coordinates coordinates, Coordinates newCoordinates) {
+        Entity entity = map.get(coordinates);
+        if (entity == null) throw new RuntimeException();
         if (entity instanceof Herbivore) {
-            herbivoreOnMap.remove(coordinates);
-            herbivoreOnMap.add(newCoordinates);
+            herbivoresOnMap.remove(coordinates);
+            herbivoresOnMap.add(newCoordinates);
         } else {
             predatorsOnMap.remove(coordinates);
             predatorsOnMap.add(newCoordinates);
         }
-        map.removeEntity(coordinates);
-        map.setEntity(entity, newCoordinates);
+        map.remove(coordinates);
+        map.put(newCoordinates, entity);
 
     }
 
