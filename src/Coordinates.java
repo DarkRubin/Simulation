@@ -1,9 +1,7 @@
 package src;
 
-import java.util.ArrayList;
 import java.util.Objects;
 
-import static src.Simulation.*;
 
 public class Coordinates {
     public Integer length;
