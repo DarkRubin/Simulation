@@ -8,17 +8,16 @@ import src.Entity.Grass;
 
 import java.util.List;
 
+import static src.Entity.Grass.grassOnMap;
 import static src.Simulation.*;
 
 public abstract class Creature extends Entity {
 
-    private final boolean IS_HERBIVORE;
-    public Creature(Coordinates coordinates, boolean IS_HERBIVORE) {
+    public Creature(Coordinates coordinates) {
         super(coordinates);
-        this.IS_HERBIVORE = IS_HERBIVORE;
     }
 
-    protected void foundAndGo(Coordinates coordinates, int MOVE_RANGE) {
+    protected void foundAndGo(Coordinates coordinates, int MOVE_RANGE, boolean IS_HERBIVORE) {
         SearchWay searchWay = new SearchWay(IS_HERBIVORE, coordinates);
         List<Coordinates> way = searchWay.foundWay();
         if (way != null && way.size() > 1) {
@@ -39,7 +38,26 @@ public abstract class Creature extends Entity {
         }
     }
 
-    protected Coordinates checkCellsForFood(Coordinates coordinates) {
+    protected boolean creatureEat(Coordinates coordinates, boolean IS_HERBIVORE) {
+        Coordinates belowCell = checkCellsForFood(coordinates, IS_HERBIVORE);
+        if (IS_HERBIVORE && map.getEntity(belowCell) instanceof Grass) {
+            map.removeEntity(belowCell);
+            grassOnMap.remove(belowCell);
+            return true;
+        } else if (!IS_HERBIVORE && map.getEntity(belowCell) instanceof Herbivore herbivore) {
+            herbivore.takeHurt(belowCell);
+            return true;
+        }
+        return false;
+    }
+
+    protected boolean makeMove(Coordinates coordinates, int MOVE_RANGE, boolean IS_HERBIVORE) {
+        if (creatureEat(coordinates, IS_HERBIVORE)) return true;
+        foundAndGo(coordinates, MOVE_RANGE, IS_HERBIVORE);
+        return false;
+    }
+
+    protected Coordinates checkCellsForFood(Coordinates coordinates, boolean IS_HERBIVORE) {
         if (coordinates == null) return null;
 
         Coordinates[] search = coordinates.getBelowCoordinates(false);
