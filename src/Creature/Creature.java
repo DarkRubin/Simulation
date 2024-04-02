@@ -1,6 +1,5 @@
 package src.Creature;
 
-import src.Actions.MapConsoleRenderer;
 import src.Actions.SearchWay;
 import src.Coordinates;
 import src.Entity.Entity;
@@ -29,7 +28,6 @@ public abstract class Creature extends Entity {
     }
 
     private void goForFood(int MOVE_RANGE, List<Coordinates> way, Coordinates coordinates) {
-        MapConsoleRenderer renderer = new MapConsoleRenderer();
         int index = 0;
         for (Coordinates cell : way.reversed()) {
             if (index <= MOVE_RANGE) {
@@ -39,7 +37,6 @@ public abstract class Creature extends Entity {
                 index++;
             } else break;
         }
-        renderer.render();
     }
 
     protected Coordinates checkCellsForFood(Coordinates coordinates) {

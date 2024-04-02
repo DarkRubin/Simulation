@@ -8,7 +8,7 @@ import static java.lang.Thread.sleep;
 
 
 public class Simulation {
-    private static final String START_TEXT = "Введите количество ходов для симуляции,\"SPACE\" чтобы остановить, \"0\" - выйти";
+    private static final String START_TEXT = "Введите количество ходов для симуляции, \"0\" - выйти";
     public static int maxLength;
     public static int maxWidth;
 
@@ -17,13 +17,10 @@ public class Simulation {
     private final Scanner scanner = new Scanner(System.in);
 
 
-    public Simulation() {
-        new CreateSimulation();
-        startSimulation();
-    }
 
     public void startSimulation() {
-
+        CreateSimulation creator = new CreateSimulation();
+        creator.createSimulation();
         System.out.println(START_TEXT);
         int count = scanner.nextInt();
         while (count != 0) {

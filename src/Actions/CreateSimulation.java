@@ -24,7 +24,7 @@ public class CreateSimulation {
             System.out.println("Введите длину поля:");
             length = scanner.nextInt();
             if (length < 4 || length > 50) {
-                System.out.println("Недопустимое значение, введите от 4 до 50, \"0\" - выход");
+                System.out.println("Недопустимое значение, введите от 4 до 50");
                 continue;
             }
             System.out.println("Введите ширину поля:");
@@ -32,7 +32,7 @@ public class CreateSimulation {
             if (width >= 4 && width <= 50) {
                 break;
             } else {
-                System.out.println("Недопустимое значение, введите от 4 до 50, \"0\" - выход");
+                System.out.println("Недопустимое значение, введите от 4 до 50");
             }
         }
         maxLength = length;
@@ -53,7 +53,7 @@ public class CreateSimulation {
         };
     }
 
-    public CreateSimulation() {
+    public void createSimulation() {
         chooseMapSize();
         for (int width = 1; width <= maxWidth; width++) {
             for (int length = 1; length <= maxLength; length++) {
