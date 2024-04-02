@@ -14,30 +14,6 @@ public class Coordinates {
         this.width = width;
     }
 
-    public Coordinates[] getBelowCoordinates(boolean onlyEmpty) {
-        ArrayList<Coordinates> belowCells = new ArrayList<>();
-        int newLength;
-        int newWidth;
-        for (int i = -1; i <= 1; i++) {
-            for (int j = -1; j <= 1; j++) {
-                if (i != 0 || j != 0) {
-                    if (length + j > 0 && length + j <= maxLength) {
-                        newLength = length + j;
-                    } else continue;
-                    if (width + i > 0 && width + i <= maxWidth) {
-                        newWidth = width + i;
-                    } else continue;
-                    if (!onlyEmpty) {
-                        belowCells.add(new Coordinates(newLength, newWidth));
-                    }else if (map.getEntity(new Coordinates(newLength, newWidth)) == null) {
-                        belowCells.add(new Coordinates(newLength, newWidth));
-                    }
-                }
-            }
-        }
-        return belowCells.toArray(new Coordinates[0]);
-    }
-
 
     @Override
     public boolean equals(Object o) {

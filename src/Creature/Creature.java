@@ -48,7 +48,7 @@ public abstract class Creature extends Entity {
     }
 
     protected Coordinates checkBelowCellsForFood(Coordinates coordinates) {
-        Coordinates[] search = coordinates.getBelowCoordinates(false);
+        Coordinates[] search = SearchWay.getBelowCoordinates(coordinates, false);
         for (Coordinates value : search) {
             if (isFood(value))
                 return value;
