@@ -2,6 +2,8 @@ package src.Creature;
 
 import src.Coordinates;
 
+import src.Entity.Grass;
+
 
 import java.util.ArrayList;
 
@@ -14,15 +16,26 @@ public class Herbivore extends Creature {
     public Coordinates coordinates;
     private static final int MOVE_RANGE = 4;
     private int healthPoint = 10;
-    private final boolean IS_HERBIVORE;
     public static ArrayList<Coordinates> herbivoresOnMap = new ArrayList<>();
+    private final Class<Grass> TARGET = Grass.class;
 
 
     public Herbivore(Coordinates coordinates) {
         super(coordinates);
-        IS_HERBIVORE = true;
         this.coordinates = coordinates;
         herbivoresOnMap.add(coordinates);
+    }
+
+    @Override
+    protected void creatureEat(Coordinates coordinates) {
+        map.removeEntity(coordinates);
+        grassOnMap.remove(coordinates);
+        healthPoint += 5;
+    }
+
+    @Override
+    protected boolean isFood(Coordinates coordinates) {
+        return map.getEntity(coordinates) instanceof Grass;
     }
 
     protected void takeHurt(Coordinates coordinates) {
@@ -37,9 +50,7 @@ public class Herbivore extends Creature {
 
     public void makeMove(Coordinates coordinates) {
         if (grassOnMap.isEmpty()) return;
-        if (super.makeMove(coordinates, MOVE_RANGE, IS_HERBIVORE)) {
-            healthPoint += 5;
-        }
+        super.makeMove(coordinates, MOVE_RANGE, TARGET);
     }
 
 }

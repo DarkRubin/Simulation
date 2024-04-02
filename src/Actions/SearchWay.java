@@ -1,29 +1,27 @@
 package src.Actions;
 
 import src.Coordinates;
-import src.Creature.Herbivore;
-import src.Entity.Grass;
 
 import java.util.*;
 
 import static src.Simulation.map;
 
 public class SearchWay {
-    private final boolean IS_HERBIVORE;
     private final Coordinates coordinates;
+    private Class<?> TARGET;
 
-    public SearchWay(boolean IS_HERBIVORE, Coordinates coordinates) {
-        this.IS_HERBIVORE = IS_HERBIVORE;
+    public SearchWay(Coordinates coordinates) {
         this.coordinates = coordinates;
     }
 
-    public ArrayList<Coordinates> foundWay() {
+    public ArrayList<Coordinates> foundWay(Class<?> TARGET) {
+        this.TARGET = TARGET;
         ArrayList<Coordinates> way = new ArrayList<>();
         way.add(new Coordinates(-99, -99));
         while (!coordinates.equals(way.getLast())) {
             build(way);
             if (way.size() == 1) {
-                return null;
+                return way;
             }
         }
         way.removeFirst();
@@ -52,11 +50,9 @@ public class SearchWay {
 
     }
 
-    private boolean isFood (Coordinates coordinates) {
-        if (IS_HERBIVORE && map.getEntity(coordinates) instanceof Grass)
-            return true;
-        else
-            return !IS_HERBIVORE && map.getEntity(coordinates) instanceof Herbivore;
+    private boolean isFood(Coordinates coordinates) {
+        if (map.getEntity(coordinates) == null) return false;
+        return map.getEntity(coordinates).getClass().getSimpleName().equals(TARGET.getSimpleName());
     }
 
 }

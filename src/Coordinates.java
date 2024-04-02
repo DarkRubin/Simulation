@@ -35,9 +35,6 @@ public class Coordinates {
                 }
             }
         }
-        if (belowCells.isEmpty()) {
-            return null;
-        }
         return belowCells.toArray(new Coordinates[0]);
     }
 

@@ -41,7 +41,7 @@ public class CreateSimulation {
 
 
 
-    private Entity summonEntity(Coordinates coordinates) {
+    private Entity trySummonRandomEntity(Coordinates coordinates) {
         int random = new Random().nextInt(11);
         return switch (random) {
             case 1 -> new Tree(coordinates);
@@ -58,7 +58,7 @@ public class CreateSimulation {
         for (int width = 1; width <= maxWidth; width++) {
             for (int length = 1; length <= maxLength; length++) {
                 Coordinates coordinates = new Coordinates(length,width);
-                Entity entity = summonEntity(coordinates);
+                Entity entity = trySummonRandomEntity(coordinates);
                 if (entity == null) continue;
                 map.setEntity(entity, coordinates);
             }
