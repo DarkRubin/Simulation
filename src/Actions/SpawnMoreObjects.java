@@ -51,10 +51,11 @@ public class SpawnMoreObjects extends Action {
 
 
     private Coordinates[] spawner(int countToSpawn) {
+        Random random = new Random();
         Coordinates[] freeCells = new Coordinates[countToSpawn];
         while (0 < countToSpawn) {
-            int length = new Random().nextInt(1, maxLength);
-            int width = new Random().nextInt(1, maxWidth);
+            int length = random.nextInt(1, maxLength);
+            int width = random.nextInt(1, maxWidth);
             Coordinates coordinates = new Coordinates(length, width);
             if (map.getEntity(coordinates) == null) {
                 freeCells[countToSpawn-1] = coordinates;

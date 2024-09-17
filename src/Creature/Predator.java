@@ -3,6 +3,7 @@ package src.Creature;
 import src.Coordinates;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import static src.Creature.Herbivore.herbivoresOnMap;
 import static src.Simulation.map;
@@ -12,13 +13,11 @@ public class Predator extends Creature {
     static final int POWER = 5;
     private static final int MOVE_RANGE = 5;
 
-    public Coordinates coordinates;
-    public static ArrayList<Coordinates> predatorsOnMap = new ArrayList<>();
-    private final Class<Herbivore> TARGET = Herbivore.class;
+    public static List<Coordinates> predatorsOnMap = new ArrayList<>();
+    private static final Class<Herbivore> TARGET = Herbivore.class;
 
     public Predator(Coordinates coordinates) {
         super(coordinates);
-        this.coordinates = coordinates;
         predatorsOnMap.add(coordinates);
     }
 

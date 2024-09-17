@@ -19,19 +19,19 @@ public abstract class Creature extends Entity {
     protected abstract void creatureEat(Coordinates coordinates);
     protected abstract boolean isFood(Coordinates coordinates);
 
-    protected void searchAndGo(Coordinates coordinates, int MOVE_RANGE, Class<?> TARGET) {
+    protected void searchAndGo(Coordinates coordinates, int moveRange, Class<?> target) {
         SearchWay searchWay = new SearchWay(coordinates);
-        List<Coordinates> way = searchWay.foundWay(TARGET);
+        List<Coordinates> way = searchWay.foundWay(target);
         if (way.size() > 1) {
             way.removeLast();
-            goForFood(MOVE_RANGE, way, coordinates);
+            goForFood(moveRange, way, coordinates);
         }
     }
 
-    private void goForFood(int MOVE_RANGE, List<Coordinates> way, Coordinates coordinates) {
+    private void goForFood(int moveRange, List<Coordinates> way, Coordinates coordinates) {
         int index = 0;
         for (Coordinates cell : way.reversed()) {
-            if (index <= MOVE_RANGE) {
+            if (index <= moveRange) {
                 map.moveEntity(coordinates, cell);
                 this.coordinates = cell;
                 coordinates = cell;
@@ -40,15 +40,15 @@ public abstract class Creature extends Entity {
         }
     }
 
-    protected void makeMove(Coordinates coordinates, int MOVE_RANGE, Class<?> TARGET) {
+    protected void makeMove(Coordinates coordinates, int moveRange, Class<?> target) {
         Coordinates food = checkBelowCellsForFood(coordinates);
         if (food.equals(notFound)) {
-            searchAndGo(coordinates, MOVE_RANGE, TARGET);
+            searchAndGo(coordinates, moveRange, target);
         } else creatureEat(food);
     }
 
     protected Coordinates checkBelowCellsForFood(Coordinates coordinates) {
-        Coordinates[] search = SearchWay.getBelowCoordinates(coordinates, false);
+        Coordinates[] search = SearchWay.getBelowCoordinates(coordinates);
         for (Coordinates value : search) {
             if (isFood(value))
                 return value;

@@ -8,15 +8,15 @@ import static src.Simulation.*;
 
 public class SearchWay {
     private final Coordinates coordinates;
-    private Class<?> TARGET;
+    private Class<?> target;
 
     public SearchWay(Coordinates coordinates) {
         this.coordinates = coordinates;
     }
 
-    public ArrayList<Coordinates> foundWay(Class<?> TARGET) {
-        this.TARGET = TARGET;
-        ArrayList<Coordinates> way = new ArrayList<>();
+    public List<Coordinates> foundWay(Class<?> target) {
+        this.target = target;
+        List<Coordinates> way = new ArrayList<>();
         way.add(new Coordinates(-99, -99));
         while (!coordinates.equals(way.getLast())) {
             build(way);
@@ -28,14 +28,14 @@ public class SearchWay {
         return way;
     }
 
-    public void build(ArrayList<Coordinates> way) {
+    public void build(List<Coordinates> way) {
         LinkedHashSet<Coordinates> queue = new LinkedHashSet<>();
-        ArrayList<Coordinates> visited = new ArrayList<>();
+        List<Coordinates> visited = new ArrayList<>();
         queue.add(coordinates);
         while (!queue.isEmpty()) {
             Coordinates cell = queue.removeFirst();
             visited.add(cell);
-            for (Coordinates belowCell : getBelowCoordinates(cell,false)) {
+            for (Coordinates belowCell : getBelowCoordinates(cell)) {
                 if (visited.contains(belowCell)) continue;
                 if (isFood(belowCell) || way.getLast().equals(belowCell)) {
                     way.add(cell);
@@ -50,10 +50,10 @@ public class SearchWay {
 
     }
 
-    public static Coordinates[] getBelowCoordinates(Coordinates coordinates, boolean onlyEmpty) {
-        int length = coordinates.length;
-        int width = coordinates.width;
-        ArrayList<Coordinates> belowCells = new ArrayList<>();
+    public static Coordinates[] getBelowCoordinates(Coordinates coordinates) {
+        int length = coordinates.length();
+        int width = coordinates.width();
+        List<Coordinates> belowCells = new ArrayList<>();
         int newLength;
         int newWidth;
         for (int i = -1; i <= 1; i++) {
@@ -78,7 +78,7 @@ public class SearchWay {
 
     private boolean isFood(Coordinates coordinates) {
         if (map.getEntity(coordinates) == null) return false;
-        return map.getEntity(coordinates).getClass().getSimpleName().equals(TARGET.getSimpleName());
+        return map.getEntity(coordinates).getClass().getSimpleName().equals(target.getSimpleName());
     }
 
 }
